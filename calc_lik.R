@@ -1,4 +1,4 @@
-# calculate sample_G1model_mlogliks 
+# calculate sample_G1model_mlogliks:  sample1_G1model_liks = P{D_(g,s) = d_(g,s) | G1 model}
 # variables include prior and conditional prop
 # prior: expr (1*25) M_exprGB (25*25) M_exprP (25*25) 
 # conditional prop: EXPR.likelihood (25), mP.likelihood (6*25), mGB.likelihood (10*25)
