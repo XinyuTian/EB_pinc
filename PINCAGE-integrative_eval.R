@@ -133,15 +133,15 @@ for (i in beg:end){
 	
 	# expression
 	temp <- counts[workingList_BRCA[i],c(G2,G1)]
-	tempAN <- matrix(ncol=2)
+	tempAN <- matrix(ncol=2, nrow=0)
 	colnames(tempAN) <- c("cpm","density")
 	for (j in 1:length(temp)) {
 		lambda <- as.numeric(temp[j])
-		if (lambda > 0) X <- seq(round(max(lambda-(4*lambda*lambda^(-1/2)),0)),round(lambda+(4*lambda*lambda^(-1/2)))) else X <- 0:1
+		if (lambda > 0) X <- seq(round(max(lambda-(4*sqrt(lambda)),0)),round(lambda+(4*sqrt(lambda)))) else X <- 0:1
 		current <- factors_ls[c(G2,G1)[j]]
 		tempAN <- rbind(tempAN,cbind(X/current,dpois(X,lambda=lambda)))
 	}
-	tempAN <- as.data.frame(tempAN[-1,],)
+	tempAN <- as.data.frame(tempAN)
 	tempAN <- tempAN[order(tempAN$cpm),]
 	tempAN[,3] <- cumsum(tempAN[,2])
 	if (max(tempAN[,3]) != 0) tempAN[,3] <- tempAN[,3]/max(tempAN[,3])
@@ -204,7 +204,7 @@ for (i in beg:end){
 			frequencies_expr[freq] <- integrate(integrand_e, lower = lambdas[freq], upper = lambdas[freq+1], read_count,stop.on.error=FALSE)[1]
 		}
 		frequencies_expr <- unlist(frequencies_expr)
-		if (length(which(frequencies_expr==0))==res_expr) frequencies_expr[length(frequencies_expr)] <- 1
+		if (all(frequencies_expr == 0)) frequencies_expr[length(frequencies_expr)] <- 1
 		frequencies_expr <- frequencies_expr + epsilon_e_G1
 		frequencies_expr <- frequencies_expr/sum(frequencies_expr)
 		

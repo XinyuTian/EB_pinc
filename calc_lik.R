@@ -1,4 +1,4 @@
-# calculate sample_G1model_mlogliks:  sample1_G1model_liks = P{D_(g,s) = d_(g,s) | G1 model}
+# calculate sample_G1model_mlogliks 
 # variables include prior and conditional prop
 # prior: expr (1*25) M_exprGB (25*25) M_exprP (25*25) 
 # conditional prop: EXPR.likelihood (25), mP.likelihood (6*25), mGB.likelihood (10*25)
@@ -31,7 +31,6 @@ facData <- alply(tt, 1, str2tabs) # n.samples * (1+6+10) * 25
 ### End read.Fac
 
 ### read.Potential
-cat(file2)
 inputFile <- file2
 temp_files = paste0("M", 1:5, "_temp.txt")
 con  <- file(inputFile, open = "r")
