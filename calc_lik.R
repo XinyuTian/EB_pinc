@@ -26,7 +26,7 @@ str2tabs <- function(str, t1=ti_expr, t2=ti_p, t3=ti_gb){
   return(result)
 }
 
-library(plyr)
+suppressWarnings(library("plyr"))
 facData <- alply(tt, 1, str2tabs) # n.samples * (1+6+10) * 25
 ### End read.Fac
 
@@ -85,7 +85,7 @@ mGB = lapply(mGB, function(xx) sub("\\).*", "", sub(".*\\(", "", xx)) )
 mGB = lapply(mGB, function(xx) strsplit(xx, ',') )
 mGB = matrix(as.numeric(unlist(mGB)), ncol = 25, byrow = T)
 
-file.remove(temp_files)
+invisible(file.remove(temp_files))
 ### End read.Potential
 
 
@@ -108,5 +108,5 @@ for(i in 1:length(facData)) {
     sample1_G1model_liks <- sample1_G1model_liks + res
   }
   sample1_G1model_mlogliks = -log(sample1_G1model_liks)
-  print(sample1_G1model_mlogliks)
+  cat(paste0(sample1_G1model_mlogliks, "\n"))
 }

@@ -8,9 +8,9 @@ end <- as.numeric(args[2]) # last consequitve ID to process
 load("./essentials_allBRCA.RData") # data to work on
 G10 <- G1
 G20 <- G2
-IDs_length <- nchar(G1[1])+2
-G1 <- G1[c(1,2,5,6,7,8,10,14,18,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,37,38,39,41,42,45,46,47,48,49,51,53,54,56,57,58,59,61,62,64,65,67,68,70,71,75,76,77,78,80,81)]
-G2 <- G2[c(1,2,3,5,7,9,10,12,13,14,15,16,19,20,21,22,23,24,25,26,27,30,31,32,34,35,36,37,38,39,41,42,44,46,47,48,52,53,54,55,58,59,61,62,64,65,66,67,69,72,74,76,77,79,81,82,83,87,88,89,90,91,92,93,94,95,97,98,99,101,102,103,104,106,108,112,113,115,116,117,119,120,121,122,125,126,128,129,130,131,132,133,135,136,137,139,141,142,143,145,146,147,148,149,152,155,156,157,158,159,160,164,165,166,168,169,170,172,173,174,176,178,180,181,182,183,184,187,189,190,191,192,193,194,195,197,198,201,202,203,204,205,208,210,212,214,215,217,219,220,221,223,224,225,228,229,232,237,238,239,240,241,244,245,246,247,248,250,251,252,253,254,255,256,259,260,263,264,265,266,268,269,270,272,277,278,279,280,282,283,284,287,289,290,291,292,295,296,297,298,299,300,301,302,303,305,308,309,310,311,313,314,316,317,318,319,320,321,322,324,326,330,332,333,334,335,336,337,339,340,342,345,349,351,352,353,354,355,356,357,358,360,361,362,363,364,365,367,368,369,370,371,372,373,376,377,379,380,382,383,387,390,391,393,397,399,400,402,403,404,405,406,407,409,411,412,413,414,415,417,418,420,422,423,424,426,427,428,429,431,432,433,435,436,437,438,439,442,445,447,448,450,451,452,453,454,455,456,459,461,463,467,468,471,472,473,474,475,477,479,481,482,484,485,486,488,489,490,491,493,494,495,497,500,502,503,505,507,509,510,511,512,513,514,517,518,519,520,521,523,524,525,527,528,529,530,531,532,534,535,536,537,539,540,541,545,546,551,552,553,554,555,556,557,559,561,567,569,570,575,579,580,582,583,584,585,586,589,591,594,596,598,600,602,603,604,605,606,609,610,611,612,613,614,616,618,619,620,621,622,623,625,628,630,631,632,633,634,635,636,638,639,640,641,642,643,645,646,647,648,649,650,652,653,654,658,659,660,661,662,663,664,666,667,669,671,672,673,674,676,677,679,680,681,682,684,685,686,688,689,690,691,696,698,702,703,705,706,707,708,709,711,712,713,714,715,716,718,720,721,722,723,724,726,728,729,730)]
+# IDs_length <- nchar(G1[1])+2
+G1 <- G10[c(1,2,5,6,7,8,10,14,18,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,37,38,39,41,42,45,46,47,48,49,51,53,54,56,57,58,59,61,62,64,65,67,68,70,71,75,76,77,78,80,81)]
+G2 <- G20[c(1,2,3,5,7,9,10,12,13,14,15,16,19,20,21,22,23,24,25,26,27,30,31,32,34,35,36,37,38,39,41,42,44,46,47,48,52,53,54,55,58,59,61,62,64,65,66,67,69,72,74,76,77,79,81,82,83,87,88,89,90,91,92,93,94,95,97,98,99,101,102,103,104,106,108,112,113,115,116,117,119,120,121,122,125,126,128,129,130,131,132,133,135,136,137,139,141,142,143,145,146,147,148,149,152,155,156,157,158,159,160,164,165,166,168,169,170,172,173,174,176,178,180,181,182,183,184,187,189,190,191,192,193,194,195,197,198,201,202,203,204,205,208,210,212,214,215,217,219,220,221,223,224,225,228,229,232,237,238,239,240,241,244,245,246,247,248,250,251,252,253,254,255,256,259,260,263,264,265,266,268,269,270,272,277,278,279,280,282,283,284,287,289,290,291,292,295,296,297,298,299,300,301,302,303,305,308,309,310,311,313,314,316,317,318,319,320,321,322,324,326,330,332,333,334,335,336,337,339,340,342,345,349,351,352,353,354,355,356,357,358,360,361,362,363,364,365,367,368,369,370,371,372,373,376,377,379,380,382,383,387,390,391,393,397,399,400,402,403,404,405,406,407,409,411,412,413,414,415,417,418,420,422,423,424,426,427,428,429,431,432,433,435,436,437,438,439,442,445,447,448,450,451,452,453,454,455,456,459,461,463,467,468,471,472,473,474,475,477,479,481,482,484,485,486,488,489,490,491,493,494,495,497,500,502,503,505,507,509,510,511,512,513,514,517,518,519,520,521,523,524,525,527,528,529,530,531,532,534,535,536,537,539,540,541,545,546,551,552,553,554,555,556,557,559,561,567,569,570,575,579,580,582,583,584,585,586,589,591,594,596,598,600,602,603,604,605,606,609,610,611,612,613,614,616,618,619,620,621,622,623,625,628,630,631,632,633,634,635,636,638,639,640,641,642,643,645,646,647,648,649,650,652,653,654,658,659,660,661,662,663,664,666,667,669,671,672,673,674,676,677,679,680,681,682,684,685,686,688,689,690,691,696,698,702,703,705,706,707,708,709,711,712,713,714,715,716,718,720,721,722,723,724,726,728,729,730)]
 
 # configure here
 res_pr <- 25 # number of bins for promoter methylation
@@ -137,7 +137,7 @@ for (i in beg:end){
 	colnames(tempAN) <- c("cpm","density")
 	for (j in 1:length(temp)) {
 		lambda <- as.numeric(temp[j])
-		if (lambda > 0) X <- seq(round(max(lambda-(4*sqrt(lambda)),0)),round(lambda+(4*sqrt(lambda)))) else X <- 0:1
+		X <- seq(round(max(lambda-(4*sqrt(lambda)),0)),round(lambda+(4*sqrt(lambda))))
 		current <- factors_ls[c(G2,G1)[j]]
 		tempAN <- rbind(tempAN,cbind(X/current,dpois(X,lambda=lambda)))
 	}
@@ -289,8 +289,10 @@ for (i in beg:end){
 	eval(parse(text = paste('write.table(', paste('tempFac,file ="./',i,'/G1_model/all/G1_FacData.tab",row.names=TRUE,col.names=TRUE,quote=FALSE,sep="\t",append=FALSE)', sep = ""))))
 	
 	# query the full G1 model with G1 samples
-	string<-system(intern=TRUE,command=paste('./dfgEval_static --dfgSpecPrefix=./',i,'/G1_model/all/ -l -n - ./',i,'/G1_model/all/G1_VarData.tab ./',i,'/G1_model/all/G1_FacData.tab',sep=""))
-	G1_G1model_mlogliks <- as.numeric(substring(string[-1],IDs_length))
+	string<-system(intern=TRUE,command=paste('Rscript ~/Dropbox/My\\ ','R\\ ','Code/EB_pinc/calc_lik.R ./',i,'/G1_model/all/G1_FacData.tab ./',i,'/G1_model/all/factorPotentials.txt',sep=""))
+	G1_G1model_mlogliks <- as.numeric(string)
+	# string<-system(intern=TRUE,command=paste('./dfgEval_static --dfgSpecPrefix=./',i,'/G1_model/all/ -l -n - ./',i,'/G1_model/all/G1_VarData.tab ./',i,'/G1_model/all/G1_FacData.tab',sep=""))
+	# G1_G1model_mlogliks <- as.numeric(substring(string[-1],IDs_length))
 	###########################################################################
 	############################## G2 model ###################################
 	### full G2 model developed from here, to obtain likelihoods of G2 #######
@@ -390,8 +392,10 @@ for (i in beg:end){
 	eval(parse(text = paste('write.table(', paste('tempFac,file ="./',i,'/G2_model/all/G2_FacData.tab",row.names=TRUE,col.names=TRUE,quote=FALSE,sep="\t",append=FALSE)', sep = ""))))
 	
 	# query the full model with G2 samples
-	string<-system(intern=TRUE,command=paste('./dfgEval_static --dfgSpecPrefix=./',i,'/G2_model/all/ -l -n - ./',i,'/G2_model/all/G2_VarData.tab ./',i,'/G2_model/all/G2_FacData.tab',sep=""))
-	G2_G2model_mlogliks <- as.numeric(substring(string[-1],IDs_length))
+	string<-system(intern=TRUE,command=paste('Rscript ~/Dropbox/My\\ ','R\\ ','Code/EB_pinc/calc_lik.R ./',i,'/G2_model/all/G2_FacData.tab ./',i,'/G2_model/all/factorPotentials.txt',sep=""))
+	G2_G2model_mlogliks <- as.numeric(string)
+	# string<-system(intern=TRUE,command=paste('./dfgEval_static --dfgSpecPrefix=./',i,'/G2_model/all/ -l -n - ./',i,'/G2_model/all/G2_VarData.tab ./',i,'/G2_model/all/G2_FacData.tab',sep=""))
+	# G2_G2model_mlogliks <- as.numeric(substring(string[-1],IDs_length))
 	##########################################################################
 	
 	###########################################################################
@@ -432,8 +436,10 @@ for (i in beg:end){
 	eval(parse(text = paste('write.table(', paste('tempFac,file = "./',i,'/full_model/full_FacData.tab",row.names=TRUE,col.names=TRUE,quote=FALSE,sep="\t",append=FALSE)', sep = ""))))
 	
 	# query the full model with T and AN samples
-	string<-system(intern=TRUE,command=paste('./dfgEval_static --dfgSpecPrefix=./',i,'/full_model/ -l -n - ./',i,'/full_model/full_VarData.tab ./',i,'/full_model/full_FacData.tab',sep=""))
-	allData_jointModel_mlogliks <- as.numeric(substring(string[-1],IDs_length))
+	string<-system(intern=TRUE,command=paste('Rscript ~/Dropbox/My\\ ','R\\ ','Code/EB_pinc/calc_lik.R ./',i,'/full_model/full_FacData.tab ./',i,'/full_model/factorPotentials.txt',sep=""))
+	allData_jointModel_mlogliks <- as.numeric(string)
+	# string<-system(intern=TRUE,command=paste('./dfgEval_static --dfgSpecPrefix=./',i,'/full_model/ -l -n - ./',i,'/full_model/full_VarData.tab ./',i,'/full_model/full_FacData.tab',sep=""))
+	# allData_jointModel_mlogliks <- as.numeric(substring(string[-1],IDs_length))
 	###########################################################################################
 	
 	###########################################################################
@@ -474,8 +480,10 @@ for (i in beg:end){
 		close(potentials)
 		
 		# query
-		string<-system(intern=TRUE,command=paste('./dfgEval_static --dfgSpecPrefix=./',i,'/null/G2_model/ -l -n - ./',i,'/G2_model/all/G2_VarData.tab ./',i,'/null/G2_model/G2_FacData.tab',sep=""))
-		G2_G2model_mlogliks <- as.numeric(substring(string[-1],IDs_length))
+		string<-system(intern=TRUE,command=paste('Rscript ~/Dropbox/My\\ ','R\\ ','Code/EB_pinc/calc_lik.R ./',i,'/G2_model/all/G2_FacData.tab ./',i,'/null/G2_model/factorPotentials.txt',sep=""))
+		G2_G2model_mlogliks <- as.numeric(string)
+		# string<-system(intern=TRUE,command=paste('./dfgEval_static --dfgSpecPrefix=./',i,'/null/G2_model/ -l -n - ./',i,'/G2_model/all/G2_VarData.tab ./',i,'/null/G2_model/G2_FacData.tab',sep=""))
+		# G2_G2model_mlogliks <- as.numeric(substring(string[-1],IDs_length))
 		
 		# G1
 		tempFac_G1 <- tempFac[-cur,]
@@ -507,8 +515,10 @@ for (i in beg:end){
 		close(potentials)
 		
 		# query
-		string<-system(intern=TRUE,command=paste('./dfgEval_static --dfgSpecPrefix=./',i,'/null/G1_model/ -l -n - ./',i,'/G1_model/all/G1_VarData.tab ./',i,'/null/G1_model/G1_FacData.tab',sep=""))
-		G1_G1model_mlogliks <- as.numeric(substring(string[-1],IDs_length))
+		string<-system(intern=TRUE,command=paste('Rscript ~/Dropbox/My\\ ','R\\ ','Code/EB_pinc/calc_lik.R ./',i,'/G1_model/all/G1_FacData.tab ./',i,'/null/G1_model/factorPotentials.txt',sep=""))
+		G1_G1model_mlogliks <- as.numeric(string)
+		# string<-system(intern=TRUE,command=paste('./dfgEval_static --dfgSpecPrefix=./',i,'/null/G1_model/ -l -n - ./',i,'/G1_model/all/G1_VarData.tab ./',i,'/null/G1_model/G1_FacData.tab',sep=""))
+		# G1_G1model_mlogliks <- as.numeric(substring(string[-1],IDs_length))
 		
 		Ds[run] <- 2*(sum(allData_jointModel_mlogliks) - (sum(G1_G1model_mlogliks)+sum(G2_G2model_mlogliks)))
 	}
