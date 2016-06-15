@@ -149,7 +149,7 @@ for (i in beg:end){
 	noBreaks <- res_expr-1
 	for (j in 1:noBreaks) { breaks <- c(breaks, tempAN[which(tempAN[,3] >= j*(1/(1+noBreaks))),1][1])}
 	max <- max(temp)
-	if (max > 0) max_boundary <- 20+max+(4*max*max^(-1/2)) else max_boundary <- 20
+	if (max > 0) max_boundary <- 20+max+(4*sqrt(max)) else max_boundary <- 20
 	breaks <- unique(breaks)
 	if (length(breaks) == 1) breaks <- seq(max(tempAN[,1]),max_boundary-max(tempAN[,1]),(max_boundary-max(tempAN[,1]))/24) else if (length(breaks) != 24){
 		breaks <- breaks[-which(breaks %in% 0)]
