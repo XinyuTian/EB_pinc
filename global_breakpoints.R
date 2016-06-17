@@ -19,7 +19,7 @@ nb <- 25
 
 # normalization: expression = counts / factors
 expr <- mapply(`/`, counts[n0, nn], factors_ls[nn])
-counts0 <- counts[n0, nn]
+#counts0 <- counts[n0, nn]
 CPM <- sort(unlist(expr))
 breaks <- CPM[seq(nb-1) / nb * length(CPM)]
 maxCPM <- max(CPM)
@@ -33,6 +33,8 @@ breaksEXPRESSION <- c(0,breaks,max_boundary)
 
 ## result1
 breaksEXPRESSION1 <- c(0.000000e+00,4.091192e-02,1.142843e-01,2.902888e-01,6.582777e-01,1.329842e+00,2.416708e+00,3.964829e+00,6.000822e+00,8.506019e+00,1.136917e+01,1.467737e+01,1.836680e+01,2.263194e+01,2.763255e+01,3.359959e+01,4.087030e+01,5.013933e+01,6.273463e+01,8.094219e+01,1.115939e+02,1.896524e+02,5.446752e+02,1.564288e+03,4.492583e+03,1.290254e+04)
+## result use all samples
+breaksEXPRESSION_all <- c(0.000000e+00,3.141383e-02,9.679162e-02,2.479091e-01,5.692551e-01,1.182731e+00,2.219819e+00,3.773794e+00,5.855501e+00,8.387344e+00,1.132239e+01,1.467913e+01,1.851976e+01,2.296866e+01,2.820315e+01,3.448617e+01,4.221585e+01,5.198129e+01,6.504883e+01,8.401590e+01,1.162970e+02,1.953982e+02,9.114682e+02,4.251700e+03,1.983279e+04,9.251344e+04)
 
 
 ## method 2: same as PINCAGE
