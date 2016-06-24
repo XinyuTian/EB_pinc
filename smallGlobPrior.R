@@ -1,7 +1,9 @@
+## GOES WITH CALC_LIK.R 
+
 load("/Users/Xinyu/Documents/Bayes/code/integrationExpr.Rdata") 
 load("/Users/Xinyu/Documents/Bayes/code/integrationMeth.Rdata") 
 load("/Users/Xinyu/Documents/Bayes/code/methylationID.Rdata") # gbIND prIND
-load("/Users/Xinyu/Documents/Bayes/code/workingList.Rdata") # workingList, G1, G2, template_promoter_CpGs, template_body_CpGs
+load("/Users/Xinyu/Documents/Bayes/code/workingList.Rdata") # workingList, G1, G2, template_promoter_CpGs, template_body_CpGs, nruns
 library(smoothie)
 library(aws)
 
@@ -53,16 +55,27 @@ pot <- function(prGeneCpG, gbGeneCpG, exprGene, sm_param) {
 }
 
 # function to generate facData file
-fac <- function(exprGene, integrationMeth, G1, IDs_promoter, IDs_body) {
+fac <- function(exprGene, integrationMeth) {
   pasteFac <- function(xx) paste('[1,',res_expr,']((',paste(xx,sep="",collapse=","),'))',sep="",collapse="")
   tempS_G1 <- matrix(ncol=1+length(IDs_promoter)+length(IDs_body),nrow=length(G1))
-  tempS_G1[,1] <- apply(exprGene[G1, , drop=F], 1, pasteFac)
-  tempS_G1[,2:(length(IDs_promoter)+1)] <- t(apply(integrationMeth[IDs_promoter, G1, , drop=F], c(1,2), pasteFac))
-  tempS_G1[,(length(IDs_promoter)+2):(1+length(IDs_promoter)+length(IDs_body))] <- t(apply(integrationMeth[IDs_body, G1, , drop=F], c(1,2), pasteFac))
+  tempS_G1[,1] <- apply(exprGene, 1, pasteFac)
+  tempS_G1[,2:(length(IDs_promoter)+1)] <- t(apply(integrationMeth[IDs_promoter, , , drop=F], c(1,2), pasteFac))
+  tempS_G1[,(length(IDs_promoter)+2):(1+length(IDs_promoter)+length(IDs_body))] <- t(apply(integrationMeth[IDs_body, , , drop=F], c(1,2), pasteFac))
   return(tempS_G1)
 }
 
-for (gene in workingList) {
+for (i in length(workingList)) {
+  system(command=paste('mkdir',i,sep=" "))
+  system(command=paste('mkdir ./',i,'/G1_model',sep=""))
+  system(command=paste('mkdir ./',i,'/G1_model/all',sep=""))
+  system(command=paste('mkdir ./',i,'/G2_model',sep=""))
+  system(command=paste('mkdir ./',i,'/G2_model/all',sep=""))
+  system(command=paste('mkdir ./',i,'/full_model',sep=""))
+  system(command=paste('mkdir ./',i,'/null',sep=""))
+  system(command=paste('mkdir ./',i,'/null/G1_model',sep=""))
+  system(command=paste('mkdir ./',i,'/null/G2_model',sep=""))
+  
+  gene <- workingList[i]
   IDs_promoter <- eval(parse(text = paste0('prIND$SID$','"',gene,'"')))
   IDs_body <- eval(parse(text = paste0('gbIND$SID$','"',gene,'"')))
   
@@ -86,7 +99,7 @@ for (gene in workingList) {
   cat(G1_prior,file=potentials)
   close(potentials)
   
-  tempS_G1 <- fac(exprGene, integrationMeth, G1, IDs_promoter, IDs_body)
+  tempS_G1 <- fac(exprGene[G1, , drop=F], integrationMeth[c(IDs_promoter, IDs_body), G1, , drop=F])
   rownames(tempS_G1) <- G1
   colnames(tempS_G1) <- c("NAME:\tEXPR.likelihood",promoter_CpGs,geneBody_CpGs)
   eval(parse(text = paste('write.table(', paste('tempS_G1,file ="./',i,'/G1_model/all/G1_FacData.tab",row.names=TRUE,col.names=TRUE,quote=FALSE,sep="\t",append=FALSE)', sep = ""))))
@@ -100,7 +113,7 @@ for (gene in workingList) {
   cat(G2_prior,file=potentials)
   close(potentials)
   
-  tempS_G2 <- fac(exprGene, integrationMeth, G2, IDs_promoter, IDs_body)
+  tempS_G2 <- fac(exprGene[G2, , drop=F], integrationMeth[c(IDs_promoter, IDs_body), G2, , drop=F])
   rownames(tempS_G2) <- G2
   colnames(tempS_G2) <- c("NAME:\tEXPR.likelihood",promoter_CpGs,geneBody_CpGs)
   eval(parse(text = paste('write.table(', paste('tempS_G2,file ="./',i,'/G2_model/all/G2_FacData.tab",row.names=TRUE,col.names=TRUE,quote=FALSE,sep="\t",append=FALSE)', sep = ""))))
@@ -109,22 +122,56 @@ for (gene in workingList) {
   G2_G2model_mlogliks <- as.numeric(string)
   ###########################################################################
   ############################   Full model   ###############################
-  G1_prior = pot(prGeneCpG[G1,], gbGeneCpG[G1,], exprGene[G1,], sm_param)  
-  potentials <- file(paste("./",i,"/G1_model/all/factorPotentials.txt",sep=""),"w")
-  cat(G1_prior,file=potentials)
+  Full_prior = pot(prGeneCpG[c(G1,G2),], gbGeneCpG[c(G1,G2),], exprGene[c(G1,G2),], sm_param)  
+  potentials <- file(paste("./",i,"/full_model/factorPotentials.txt",sep=""),"w")
+  cat(Full_prior,file=potentials)
   close(potentials)
   
-  tempS_G1 <- fac(exprGene, integrationMeth, G1, IDs_promoter, IDs_body)
-  rownames(tempS_G1) <- G1
-  colnames(tempS_G1) <- c("NAME:\tEXPR.likelihood",promoter_CpGs,geneBody_CpGs)
-  eval(parse(text = paste('write.table(', paste('tempS_G1,file ="./',i,'/G1_model/all/G1_FacData.tab",row.names=TRUE,col.names=TRUE,quote=FALSE,sep="\t",append=FALSE)', sep = ""))))
+  tempFac <- rbind(tempS_G1,tempS_G2)
+  rownames(tempFac) <- c(G1,G2)
+  colnames(tempFac) <- c("NAME:\tEXPR.likelihood",promoter_CpGs,geneBody_CpGs)
+  eval(parse(text = paste('write.table(', paste('tempFac,file = "./',i,'/full_model/full_FacData.tab",row.names=TRUE,col.names=TRUE,quote=FALSE,sep="\t",append=FALSE)', sep = ""))))
   
-  string<-system(intern=TRUE,command=paste('Rscript ~/Dropbox/My\\ ','R\\ ','Code/EB_pinc/calc_lik.R ./',i,'/G1_model/all/G1_FacData.tab ./',i,'/G1_model/all/factorPotentials.txt',sep=""))
-  G1_G1model_mlogliks <- as.numeric(string)
-  
-  
-  
+  # query the full model with T and AN samples
+  string<-system(intern=TRUE,command=paste('Rscript ~/Dropbox/My\\ ','R\\ ','Code/EB_pinc/calc_lik.R ./',i,'/full_model/full_FacData.tab ./',i,'/full_model/factorPotentials.txt',sep=""))
+  allData_jointModel_mlogliks <- as.numeric(string)
   ###########################################################################
-  ############################## XXXXX model ################################
+  ######################## D calculation ###################################
+  D <- 2*(sum(allData_jointModel_mlogliks) - (sum(G1_G1model_mlogliks)+sum(G2_G2model_mlogliks)))
+  ###########################################################################
+  ################# P val calculation using null distr. #####################
+  ###########################################################################
+  Ds <- vector(length=nruns,mode="numeric")
+  for (run in 1:nruns) {
+    cur <- sample(x=1:(length(G2)+length(G1)),size=length(G2),replace=FALSE)
+    # G1
+    null_G1_prior = pot(prGeneCpG[-cur,], gbGeneCpG[-cur,], exprGene[-cur,], sm_param)  
+    potentials <- file(paste("./",i,"/null/G1_model/factorPotentials.txt",sep=""),"w")
+    cat(null_G1_prior,file=potentials)
+    close(potentials)
+    
+    # query
+    string<-system(intern=TRUE,command=paste('Rscript ~/Dropbox/My\\ ','R\\ ','Code/EB_pinc/calc_lik.R ./',i,'/G1_model/all/G1_FacData.tab ./',i,'/null/G1_model/factorPotentials.txt',sep=""))
+    G1_G1model_mlogliks <- as.numeric(string)
+
+    # G2
+    null_G2_prior = pot(prGeneCpG[cur,], gbGeneCpG[cur,], exprGene[cur,], sm_param)  
+    potentials <- file(paste("./",i,"/null/G2_model/factorPotentials.txt",sep=""),"w")
+    cat(null_G2_prior,file=potentials)
+    close(potentials)
+    
+    # query
+    string<-system(intern=TRUE,command=paste('Rscript ~/Dropbox/My\\ ','R\\ ','Code/EB_pinc/calc_lik.R ./',i,'/G2_model/all/G2_FacData.tab ./',i,'/null/G2_model/factorPotentials.txt',sep=""))
+    G2_G2model_mlogliks <- as.numeric(string)
+
+    Ds[run] <- 2*(sum(allData_jointModel_mlogliks) - (sum(G1_G1model_mlogliks)+sum(G2_G2model_mlogliks)))
+    if(is.na(Ds[run])) break
+  }
+  #if (sd(Ds, na.rm = T) != 0 & D > 0.1) zscore <- (D - mean(Ds, na.rm = T)) / sd(Ds, na.rm = T) else zscore <- -6
+  if (sd(Ds) != 0 & D > 0.1) zscore <- (D - mean(Ds)) / sd(Ds) else zscore <- -6
+  pval_zscore <- pnorm(zscore,lower.tail=FALSE)
+  ###########################################################################################
   
+  eval(parse(text=paste('write.table(x=t(c(pval_zscore,D,mean(Ds),sd(Ds),zscore)), col.names=FALSE, row.names=FALSE, append=TRUE, file="./',i,'.result")',sep="")))
+  system(intern=TRUE,command=paste('tar cf ',i,'.tar ',i,sep=""))
 }
