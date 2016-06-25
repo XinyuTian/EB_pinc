@@ -1,7 +1,7 @@
 # calculate sample_G1model_mlogliks 
 # variables include prior and conditional prop
 # MODEL(potential) prior: expr (1*25) M_exprGB (25*25) M_exprP (25*25) 
-# DATA(facData) conditional prop: EXPR.likelihood (25), mP.likelihood (6*25), mGB.likelihood (10*25)
+# DATA(facData) conditional prob: EXPR.likelihood (25), mP.likelihood (6*25), mGB.likelihood (10*25)
 # example of calling ---- Rscript calc_lik.R ~/Downloads/samples_FacData1.tab ~/Downloads/factorPotentials.txt 
 args <- commandArgs(trailingOnly = TRUE)
 file1 <- args[1] # first ID to process

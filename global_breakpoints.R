@@ -1,5 +1,5 @@
 load("./essentials_allBRCA.RData") # data to work on
-load("~/Dropbox/My R Code/EB_pinc/methylationID.Rdata")
+load("/Users/Xinyu/Documents/Bayes/code/methylationID.Rdata")
 n1 = names(gbIND$SID)
 n2 = names(prIND$SID)
 n0 = rownames(counts)[which(rowSums(counts) != 0)]
