@@ -42,7 +42,7 @@ normCoefSD <- function(values, h=1) {
     values <- values[-rm_ind, ]
   }
   means <- apply(values, 1, mean)
-  prior_valuesSD <- kernsm(sds / means, h=h)
+  prior_valuesSD <- kernsm(sds / means, h=h) ##wrong!!!
   sdsSM <- prior_valuesSD@yhat
   values <- values / sds * c(sdsSM)
   return(list("values" = values, 'means' = means, 'sdSM' = sdsSM))
