@@ -53,6 +53,31 @@ normExpr <- normExprRes$values
 sdExprSM <- normExprRes$sdSM
 meanExpr <- normExprRes$means
 
+
+t1 = unlist(round(counts)) 
+t2 = table(t1)
+NN <- function(xx) eval(parse(text = paste0('t2["', xx, '"]')))
+G = length(n0)
+h <- 1
+pz <- function(z) {
+  res <- sapply(seq(z), function(j) NN(j) * h^(z-j) * exp(h) / G / factorial(z-j))
+  return(sum(res))
+}
+delta1 <- function(z, h) {
+  (z+1) * pz(z+1) / pz(z) - h
+}
+delta2 <- function(y, h) {
+  res <- 0
+  j <- 1
+  addj <- 1
+  while(addj > 1e-6) {
+    addj <- h^j * exp(-h) / factorial(j) * delta1(y+j)
+    res <- res + addj
+    j = j + 1
+  }
+  return(res)
+}
+
 ## global breakpoints for EXPRESSION
 CPM <- sort(unlist(normExpr))
 breaks <- CPM[seq(res_expr-1) / res_expr * length(CPM)]
