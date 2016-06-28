@@ -53,27 +53,27 @@ normExpr <- normExprRes$values
 sdExprSM <- normExprRes$sdSM
 meanExpr <- normExprRes$means
 
-
-t1 = unlist(round(counts)) 
+counts_int <- round(counts)
+t1 = counts_int[,1]
 t2 = table(t1)
-NN <- function(xx) eval(parse(text = paste0('t2["', xx, '"]')))
 G = length(n0)
-h <- 1
-pz <- function(z) {
-  res <- sapply(seq(z), function(j) NN(j) * h^(z-j) * exp(h) / G / factorial(z-j))
-  return(sum(res))
+h0 <- 1
+NN <- function(xx) eval(parse(text = paste0('t2["', xx, '"]')))
+pz <- function(z, h=h0) {
+  res <- sapply(seq(z), function(j) NN(j) * h^(z-j) * exp(h) / factorial(z-j))
+  return(sum(res) / G)
 }
-delta1 <- function(z, h) {
-  (z+1) * pz(z+1) / pz(z) - h
+delta1 <- function(z, h=h0) {
+  return((z+1) * pz(z+1, h=h) / pz(z, h=h) - h)
 }
-delta2 <- function(y, h) {
+delta2 <- function(y, h=h0) {
   res <- 0
   j <- 1
   addj <- 1
   while(addj > 1e-6) {
-    addj <- h^j * exp(-h) / factorial(j) * delta1(y+j)
+    addj <- h^j * exp(-h) / factorial(j) * delta1(y+j, h=h)
     res <- res + addj
-    j = j + 1
+    j <- j + 1
   }
   return(res)
 }
