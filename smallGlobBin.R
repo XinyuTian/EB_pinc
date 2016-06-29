@@ -53,6 +53,7 @@ normExpr <- normExprRes$values
 sdExprSM <- normExprRes$sdSM
 meanExpr <- normExprRes$means
 
+# borrow information from other genes in each sample
 counts_int <- round(counts)
 t1 = counts_int[,1]
 t2 = table(t1)
