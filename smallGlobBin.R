@@ -25,33 +25,8 @@ n2 = names(prIND$SID)
 ########################################################################
 ############ ---------     EXPRESSION    ----------- ###################
 ########################################################################
-## counts -> expr -> mean, sd -> coefficient sd -> smooth sd -> expr/sd*sdSM -> breaks -> expr=breaks*mean -> breakpoints=expr*librarySize
 # normalization: expression = counts / factors
 expr <- mapply(`/`, counts, factors_ls[nn]); rownames(expr) <- n0
-## ------- standardization --------
-## do not borrow information from means, only borrow information from sd
-## sd = smoothed(sd / mean) 
-## shrinkage = smooth: kernsm
-
-# function for normalization
-normCoefSD <- function(values, h=1) {
-  sds <- apply(values, 1, sd)
-  if(any(sds == 0)) {
-    rm_ind <- which(sds == 0)
-    sds <- sds[-rm_ind]
-    values <- values[-rm_ind, ]
-  }
-  means <- apply(values, 1, mean)
-  prior_valuesSD <- kernsm(sds / means, h=h) ##wrong!!!
-  sdsSM <- prior_valuesSD@yhat
-  values <- values / sds * c(sdsSM)
-  return(list("values" = values, 'means' = means, 'sdSM' = sdsSM))
-}
-
-normExprRes <- normCoefSD(expr)
-normExpr <- normExprRes$values
-sdExprSM <- normExprRes$sdSM
-meanExpr <- normExprRes$means
 
 # borrow information from other genes in each sample
 counts_int <- round(counts)
