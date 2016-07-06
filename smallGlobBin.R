@@ -36,7 +36,7 @@ G = length(n0)
 h0 <- 1
 NN <- function(xx) eval(parse(text = paste0('t2["', xx, '"]')))
 pz <- function(z, h=h0) {
-  res <- sapply(seq(z), function(j) NN(j) * h^(z-j) * exp(h) / factorial(z-j))
+  res <- sapply(seq(min(170,z)), function(j) NN(z-j+1) * h^(j-1) * exp(h) / factorial(j-1))
   return(sum(res) / G)
 }
 delta1 <- function(z, h=h0) {
