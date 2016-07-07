@@ -1,7 +1,6 @@
 ## small sample with global PINC
 library(aws)
 load("~/Downloads/essentials_allBRCA.RData")
-load("/Users/Xinyu/Documents/Bayes/code/methylationID.Rdata") # gbIND prIND
 counts0 = counts
 mmatrix_pc0 = mmatrix_pc
 G10 <- G1
@@ -18,15 +17,12 @@ counts = counts[n0, ]
 res_expr <- 25
 epsilon <- 1e-6
 
-## ------- working list of BRCA --------
-n1 = names(gbIND$SID)
-n2 = names(prIND$SID)
 
 ########################################################################
 ############ ---------     EXPRESSION    ----------- ###################
 ########################################################################
 # normalization: expression = counts / factors
-expr <- mapply(`/`, counts, factors_ls[nn]); rownames(expr) <- n0
+# expr <- mapply(`/`, counts, factors_ls[nn]); rownames(expr) <- n0
 
 # borrow information from other genes in each sample
 counts_int <- round(counts)
@@ -34,7 +30,11 @@ t1 = counts_int[,1]
 t2 = table(t1)
 G = length(n0)
 h0 <- 1
-NN <- function(xx) eval(parse(text = paste0('t2["', xx, '"]')))
+NN <- function(xx) {
+  res <- eval(parse(text = paste0('t2["', xx, '"]')))
+  if(is.na(res)) res = 0
+  return(res)
+}
 pz <- function(z, h=h0) {
   res <- sapply(seq(min(170,z)), function(j) NN(z-j+1) * h^(j-1) * exp(h) / factorial(j-1))
   return(sum(res) / G)
@@ -83,14 +83,10 @@ for (current_gene in n0) {
 ########################################################################
 ############ ---------     METHYLATION    ----------- ##################
 ########################################################################
-# s1 <- unlist(gbIND$SID)
-# s2 <- unlist(prIND$SID)
-# mmatrix_pc <- mmatrix_pc0[union(s1,s2), nn]
-# CpG <- sort(c(mmatrix_pc))
-# breaks <- CpG[seq(res_expr-1) / res_expr * length(CpG)]
-# breaksMETHYLATION <- sort(c(-7.01,breaks,7.01))
-# # breaksMETHYLATION0 <- c(-7.0100000,-5.8478940,-5.4713917,-5.1926302,-4.9391243,-4.6778994,-4.3808218,-4.0109015,-3.4968734,-2.7292534,-1.7247853,-0.8172996,-0.1076732,0.5003966,1.0753891,1.6241419,2.1338372,2.6021923,3.0282594,3.4149241,3.7716902,4.1075183,4.4396423,4.8021497,5.2720302,7.0100000)
-# 
+load("/Users/Xinyu/Documents/Bayes/code/methylationID.Rdata") # gbIND prIND
+## ------- working list of BRCA --------
+n1 = names(gbIND$SID)
+n2 = names(prIND$SID)
 n.meth <- intersect(n1, n2)
 s1 <- unlist(gbIND$SID[n.meth])
 s2 <- unlist(prIND$SID[n.meth])
